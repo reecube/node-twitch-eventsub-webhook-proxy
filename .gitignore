@@ -322,3 +322,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/yarn,node,macos,linux,windows,webstorm,dotenv
 
 .token
+.usertoken
