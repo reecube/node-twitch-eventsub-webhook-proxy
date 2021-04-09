@@ -20,6 +20,14 @@ TODO
 
 TODO
 
+## Roadmap
+
+- [ ] Implement redemption support: https://dev.twitch.tv/docs/api/reference#update-redemption-status
+- [ ] Enforce env local tunnel id
+- [ ] Auto-fetch tokens
+- [ ] Implement scope verification
+- [ ] Implement config to remove unknown webhooks
+
 ## Credits
 
 Initial code was based on: https://github.com/twitchdev/eventsub-webhooks-node-sample
