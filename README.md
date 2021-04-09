@@ -42,6 +42,7 @@ TODO
 - [ ] Clean up files and file structure
 - [ ] Improve architecture
 - [ ] Implement JSDoc or TypeScript
+- [ ] Notification spam protection against outside
 - [ ] Verify security
 
 
