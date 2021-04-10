@@ -92,6 +92,12 @@ And to make your server running persistently, use following command:
 pm2 startup
 ```
 
+and to store the current configuration you can use:
+
+```
+pm2 save
+```
+
 ## Roadmap
 
 - [x] ~~Enforce env local tunnel id~~
