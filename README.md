@@ -94,8 +94,8 @@ pm2 startup
 
 ## Roadmap
 
+- [x] ~~Enforce env local tunnel id~~
 - [ ] Implement redemption support: https://dev.twitch.tv/docs/api/reference#update-redemption-status
-- [ ] Enforce env local tunnel id
 - [ ] Alive-webhook ping to ensure this server is still running
 - [ ] Auto-fetch tokens
 - [ ] Implement scope verification
