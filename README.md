@@ -14,17 +14,70 @@ This server forwards Twitch events to the home assistant server to trigger custo
 
 - node: https://nodejs.org/
 - yarn: https://yarnpkg.com/
+- Twitch dev account: https://dev.twitch.tv/
+
+### Optional: Our implementation
+
+We are working with the following environment for best support:
 - running home assistant server: https://www.home-assistant.io/
 - node-red recommended: https://nodered.org/
-- Twitch dev account: https://dev.twitch.tv/
 
 ## Installation
 
-TODO
+First you need to checkout the git project.
+
+For a **production deployment** we highly recommend to work with **git tags** only.
+
+Then you need to install the project dependencies with yarn:
+
+```
+yarn install
+```
+
+Now you have to setup the `.env` file on root with your configuration:
+
+```
+SECRET=
+
+HOME_ASSISTANT_WEBHOOK_URL=
+
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
+TWITCH_CLIENT_LOGIN=
+
+LT_SUBDOMAIN=
+
+PROXY_PORT=
+```
+
+As an alternative to the file you could just use environment variables.
+
 
 ## Usage
 
-TODO
+To start the proxy server call this command:
+
+```
+yarn start
+```
+
+We recommend to use `pm2` (https://pm2.keymetrics.io/) for server deployments:
+
+```
+pm2 start index.js --name "twitch-eventsub-proxy"
+```
+
+With the following command you can restart the instance after updating the code:
+
+```
+pm2 restart twitch-eventsub-proxy
+```
+
+And to make your server running persistently, use following command:
+
+```
+pm2 startup
+```
 
 ## Roadmap
 
