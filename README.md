@@ -48,6 +48,7 @@ TWITCH_CLIENT_LOGIN=
 LT_SUBDOMAIN=
 
 PROXY_PORT=
+PROXY_URL=http://localhost:
 ```
 
 As an alternative to the file you could just use environment variables.
