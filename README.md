@@ -58,19 +58,31 @@ As an alternative to the file you could just use environment variables.
 To start the proxy server call this command:
 
 ```
-yarn start
+yarn dev
 ```
 
 We recommend to use `pm2` (https://pm2.keymetrics.io/) for server deployments:
 
 ```
-pm2 start index.js --name "twitch-eventsub-proxy"
+yarn start
 ```
 
 With the following command you can restart the instance after updating the code:
 
 ```
-pm2 restart twitch-eventsub-proxy
+yarn restart
+```
+
+With the following command you can stop the instance from pm:
+
+```
+yarn stop
+```
+
+With the following command you can delete the instance from pm:
+
+```
+yarn delete
 ```
 
 And to make your server running persistently, use following command:
@@ -96,6 +108,7 @@ pm2 startup
 - [ ] Improve architecture
 - [ ] Implement JSDoc or TypeScript
 - [ ] Notification spam protection against outside
+- [ ] Graceful start and stop support: https://pm2.keymetrics.io/docs/usage/signals-clean-restart/
 - [ ] Verify security
 
 
