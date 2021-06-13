@@ -1,6 +1,15 @@
 {
+  "files": [
+    "index.ts"
+  ],
+  "include": [
+    "src/**/*"
+  ],
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs"
+    "module": "CommonJS",
+    "outDir": "dist",
+    "allowJs": true,
+    "sourceMap": true
   }
 }

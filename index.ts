@@ -1,3 +1,5 @@
+import 'source-map-support/register';
+
 import * as dotenv from 'dotenv';
 import { Main } from './src/Main';
 

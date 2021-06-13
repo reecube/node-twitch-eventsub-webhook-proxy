@@ -2,12 +2,15 @@
   "name": "home-assistant-twitch-server",
   "version": "0.0.2",
   "description": "Home Assistant Twitch Server written on node.",
+  "main": "./dist/index.js",
   "scripts": {
-    "start": "pm2 start ecosystem.config.js",
-    "restart": "pm2 restart ecosystem.config.js",
+    "start": "yarn build && pm2 start ecosystem.config.js",
+    "restart": "yarn build && pm2 restart ecosystem.config.js",
     "stop": "pm2 stop ecosystem.config.js",
     "delete": "pm2 delete ecosystem.config.js",
-    "dev": "node --trace-deprecation --abort-on-uncaught-exception --unhandled-rejections=strict -r ts-node/register ./index.ts"
+    "build": "npx tsc -p .",
+    "dist": "node --trace-deprecation --abort-on-uncaught-exception --unhandled-rejections=strict .",
+    "dev": "yarn build && yarn dist"
   },
   "repository": {
     "type": "git",
@@ -29,10 +32,8 @@
     "error-stack-parser": "^2.0.6",
     "express": "^4.17.1",
     "https": "^1.0.0",
-    "node-ts": "^5.1.1",
+    "source-map-support": "^0.5.19",
     "typescript": "^4.3.2"
   },
-  "devDependencies": {
-    "ts-node": "^10.0.0"
-  }
+  "devDependencies": {}
 }
