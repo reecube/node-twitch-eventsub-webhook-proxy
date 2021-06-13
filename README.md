@@ -64,6 +64,8 @@ yarn dev
 
 We recommend to use `pm2` (https://pm2.keymetrics.io/) for server deployments:
 
+TODO: `pm2 install typescript`
+
 ```
 yarn start
 ```
@@ -101,21 +103,22 @@ pm2 save
 ## Roadmap
 
 - [x] ~~Enforce env local tunnel id~~
-- [ ] Implement redemption support: https://dev.twitch.tv/docs/api/reference#update-redemption-status
-- [ ] Alive-webhook ping to ensure this server is still running
+- [x] ~~Clean up files and file structure~~
+- [x] ~~Implement JSDoc or TypeScript~~
+- [x] ~~Improve logger~~
+- [x] ~~Improve architecture~~
+- [ ] Implement status middleware: show server status and health
+- [ ] Implement heartbeat middleware: Alive-webhook ping to ensure this server is still running
+- [ ] Implement twitch chat middleware: enable bot support
 - [ ] Auto-fetch tokens
+- [ ] Implement redemption support: https://dev.twitch.tv/docs/api/reference#update-redemption-status
 - [ ] Implement scope verification
 - [ ] Implement config to remove unknown webhooks
 - [ ] Complete readme file
-- [ ] Implement health check
-- [ ] Implement status page
 - [ ] Implement doctor command to support with the setup process
-- [ ] Use vendor logger
-- [ ] Clean up files and file structure
-- [ ] Improve architecture
-- [ ] Implement JSDoc or TypeScript
 - [ ] Notification spam protection against outside
 - [ ] Graceful start and stop support: https://pm2.keymetrics.io/docs/usage/signals-clean-restart/
+- [ ] Implement file logger
 - [ ] Verify security
 
 
