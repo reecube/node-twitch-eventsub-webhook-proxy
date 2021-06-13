@@ -12,6 +12,14 @@ export class TwitchAuthUser extends Middleware {
     // TODO: implement this
   }
 
+  async started(): Promise<void> {
+    await super.started();
+
+    await this.fetchToken();
+
+    // TODO: implement this
+  }
+
   async fetchToken(): Promise<void> {
     // TODO: implement this
   }

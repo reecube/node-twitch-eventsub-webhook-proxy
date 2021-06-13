@@ -1,4 +1,5 @@
 import { BaseSupport } from './BaseSupport';
+import { Dictionary } from '../types/base';
 
 export interface Token {
   token: string
@@ -82,7 +83,7 @@ export class Secret extends BaseSupport {
       if (newToken !== null) break;
     }
 
-    if (Secret.verifyToken(newToken)) {
+    if (!Secret.verifyToken(newToken)) {
       throw new Error(`Twitch auth returned no or an invalid ${name} token! ${JSON.stringify(newToken)}`);
     }
 
@@ -133,5 +134,21 @@ export class Secret extends BaseSupport {
     };
 
     await this.s.fs.writeObject(path, data);
+  }
+
+  async makeApiAuthHeaders(): Promise<Dictionary<any>> {
+    const token = await this.getApiToken();
+
+    if (!token) throw new Error('Invalid api token to make auth headers!');
+
+    return this.s.c.twitchApi.makeHeaders(token);
+  }
+
+  async makeUserAuthHeaders(): Promise<Dictionary<any>> {
+    const token = await this.getUserToken();
+
+    if (!token) throw new Error('Invalid user token to make auth headers!');
+
+    return this.s.c.twitchApi.makeHeaders(token);
   }
 }

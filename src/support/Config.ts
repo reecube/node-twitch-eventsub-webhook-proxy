@@ -53,4 +53,5 @@ export class Config {
   twitchUrls = new TwitchUrls();
   twitchApi = new TwitchApi();
   endpoints = new Endpoints();
+  broadcasterId!: string;
 }

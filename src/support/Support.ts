@@ -14,6 +14,8 @@ import { TwitchChat } from '../middleware/TwitchChat';
 import { Heartbeat } from '../middleware/Heartbeat';
 import { Status } from '../middleware/Status';
 import { Tools } from '../middleware/Tools';
+import { TwitchWebhooks } from '../middleware/TwitchWebhooks';
+import { TwitchBroadcaster } from '../middleware/TwitchBroadcaster';
 
 class SupportMiddleware extends BaseSupport {
   tools = new Tools(this.s);
@@ -21,6 +23,8 @@ class SupportMiddleware extends BaseSupport {
   heartbeat = new Heartbeat(this.s);
   twitchAuthUser = new TwitchAuthUser(this.s);
   twitchEventsub = new TwitchEventsub(this.s);
+  twitchBroadcaster = new TwitchBroadcaster(this.s);
+  twitchWebhooks = new TwitchWebhooks(this.s);
   twitchChat = new TwitchChat(this.s);
 
   readonly all: Middleware[] = [
@@ -29,6 +33,8 @@ class SupportMiddleware extends BaseSupport {
     this.heartbeat,
     this.twitchAuthUser,
     this.twitchEventsub,
+    this.twitchBroadcaster,
+    this.twitchWebhooks,
     this.twitchChat,
   ];
 }
@@ -55,17 +61,21 @@ export class Support {
     }
   }
 
+  private async onStarted() {
+    this.logger.log(`Listening on port ${process.env.SERVER_PORT}`);
+
+    for (const entry of this.middleware.all) {
+      await entry.started();
+    }
+
+    this.logger.log('Initialization done. Server is ready now.');
+  }
+
   async start() {
     for (const entry of this.middleware.all) {
       await entry.start();
     }
 
-    this.app.listen(process.env.SERVER_PORT, async () => {
-      this.logger.log(`Listening on port ${process.env.SERVER_PORT}`);
-
-      for (const entry of this.middleware.all) {
-        await entry.started();
-      }
-    });
+    this.app.listen(process.env.SERVER_PORT, this.onStarted.bind(this));
   }
 }
