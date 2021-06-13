@@ -34,6 +34,8 @@ class SupportMiddleware extends BaseSupport {
 }
 
 export class Support {
+  startupTime = new Date().getTime();
+
   readonly c = new Config();
   readonly logger = new Logger(process.env.NODE_ENV === 'development');
   readonly h = new Helper();

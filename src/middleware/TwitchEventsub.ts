@@ -10,7 +10,7 @@ export class TwitchEventsub extends Middleware {
   private readonly scopesString = this.scopes.join('+');
 
   async setup(): Promise<void> {
-    this.s.app.post(this.s.c.endpoints.notification, this.onNotification);
+    this.s.app.post(this.s.c.endpoints.notification, this.onNotification.bind(this));
   }
 
   async fetchToken(): Promise<Token> {

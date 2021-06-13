@@ -7,7 +7,7 @@
     "restart": "pm2 restart ecosystem.config.js",
     "stop": "pm2 stop ecosystem.config.js",
     "delete": "pm2 delete ecosystem.config.js",
-    "dev": "npx ts-node index.ts"
+    "dev": "node --trace-deprecation --abort-on-uncaught-exception --unhandled-rejections=strict -r ts-node/register ./index.ts"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
     "https": "^1.0.0",
     "node-ts": "^5.1.1",
     "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.0.0"
   }
 }
