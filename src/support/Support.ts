@@ -8,25 +8,25 @@ import { Request } from './Request';
 import { Secret } from './Secret';
 import { BaseSupport } from './BaseSupport';
 import { Middleware } from '../types/middleware';
-import { TwitchAuthApi } from '../middleware/TwitchAuthApi';
 import { TwitchAuthUser } from '../middleware/TwitchAuthUser';
 import { TwitchEventsub } from '../middleware/TwitchEventsub';
 import { TwitchChat } from '../middleware/TwitchChat';
 import { Heartbeat } from '../middleware/Heartbeat';
 import { Status } from '../middleware/Status';
+import { Tools } from '../middleware/Tools';
 
 class SupportMiddleware extends BaseSupport {
+  tools = new Tools(this.s);
   status = new Status(this.s);
   heartbeat = new Heartbeat(this.s);
-  twitchAuthApi = new TwitchAuthApi(this.s);
   twitchAuthUser = new TwitchAuthUser(this.s);
   twitchEventsub = new TwitchEventsub(this.s);
   twitchChat = new TwitchChat(this.s);
 
   readonly all: Middleware[] = [
+    this.tools,
     this.status,
     this.heartbeat,
-    this.twitchAuthApi,
     this.twitchAuthUser,
     this.twitchEventsub,
     this.twitchChat,

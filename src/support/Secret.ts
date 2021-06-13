@@ -17,22 +17,21 @@ export class Secret extends BaseSupport {
   private apitoken: Token = null;
   private usertoken: Token = null;
 
-  private async verifyAndGetToken(
-    name: string,
-    getToken: () => Token,
-    setToken: (Token) => void,
-    fetchToken: () => Promise<void>,
-    firstCall = true,
-  ): Promise<string> {
+  private static verifyToken(token: Token): boolean {
+    if (token === null) return false;
+
     const now = new Date().getTime();
 
-    const initialToken = getToken();
+    return token.expires >= now;
+  }
 
-    if (initialToken) {
-      if (initialToken.expires >= now) {
+  async getApiToken(): Promise<string> {
+    const name = 'api';
+    const initialToken = this.apitoken;
+
+    if (initialToken !== null) {
+      if (Secret.verifyToken(initialToken)) {
         return initialToken.token;
-      } else if (!firstCall) {
-        throw new Error(`Twitch auth returned an invalid ${name} token twice! ${JSON.stringify(initialToken)}`);
       }
 
       this.s.logger.warn(`Memory ${name} token expired!`);
@@ -40,43 +39,54 @@ export class Secret extends BaseSupport {
       this.s.logger.log(`Fetch empty ${name} token.`);
     }
 
-    setToken(null);
+    this.apitoken = null;
 
-    await fetchToken();
+    const token = await this.s.middleware.twitchEventsub.fetchToken();
+
+    if (!Secret.verifyToken(token)) {
+      throw new Error(`Twitch auth returned an invalid ${name} token! ${JSON.stringify(token)}`);
+    }
+
+    this.apitoken = token;
+
+    await this.writeToFile();
+
+    return token.token;
+  }
+
+  async getUserToken(): Promise<string> {
+    const name = 'user';
+    const initialToken = this.usertoken;
+
+    if (initialToken !== null) {
+      if (Secret.verifyToken(initialToken)) {
+        return initialToken.token;
+      }
+
+      this.s.logger.warn(`Memory ${name} token expired!`);
+    } else {
+      this.s.logger.log(`Fetch empty ${name} token.`);
+    }
+
+    this.usertoken = null;
+
+    await this.s.middleware.twitchAuthUser.fetchToken();
 
     let newToken: Token = null;
 
     for (let i = 0; i < this.fetchVerifyCalls; i++) {
       await this.s.h.delay(this.fetchVerifyDelay);
 
-      newToken = getToken();
+      newToken = this.usertoken;
+
+      if (newToken !== null) break;
     }
 
-    await this.writeToFile();
+    if (Secret.verifyToken(newToken)) {
+      throw new Error(`Twitch auth returned no or an invalid ${name} token! ${JSON.stringify(newToken)}`);
+    }
 
-    return await this.verifyAndGetToken(name, getToken, setToken, fetchToken, false);
-  }
-
-  async getApiToken(): Promise<string> {
-    return await this.verifyAndGetToken(
-      'api',
-      () => this.apitoken,
-      this.setApiToken,
-      this.s.middleware.twitchAuthApi.fetchToken,
-    );
-  }
-
-  async getUserToken(): Promise<string> {
-    return await this.verifyAndGetToken(
-      'user',
-      () => this.usertoken,
-      this.setUserToken,
-      this.s.middleware.twitchAuthUser.fetchToken,
-    );
-  }
-
-  setApiToken(token: Token): void {
-    this.apitoken = token;
+    return newToken.token;
   }
 
   setUserToken(token: Token): void {
@@ -97,9 +107,7 @@ export class Secret extends BaseSupport {
 
     const data: SecretFile = await this.s.fs.readObject(path);
 
-    const now = new Date().getTime();
-
-    if (data.api.expires > now) {
+    if (data.api && !Secret.verifyToken(data.api)) {
       this.s.logger.warn('Local api token expired!');
 
       this.apitoken = null;
@@ -107,7 +115,7 @@ export class Secret extends BaseSupport {
       this.apitoken = data.api;
     }
 
-    if (data.user.expires > now) {
+    if (data.user && !Secret.verifyToken(data.user)) {
       this.s.logger.warn('Local user token expired!');
 
       this.usertoken = null;
